@@ -152,9 +152,8 @@
             box-shadow: var(--shadow-card-hover);
         }
 
-        /* 图片保护遮罩层 - 防止右键/拖拽 */
-        .wallpaper-card::after,
-        .modal-img-container::after {
+        /* 图片保护遮罩层 - 防止右键/拖拽保存，但不影响预览拖动 */
+        .wallpaper-card::after {
             content: '';
             position: absolute;
             top: 0;
@@ -191,17 +190,14 @@
             grid-row: span 1;
         }
 
-        /* 壁纸图片样式 */
+        /* 壁纸图片样式 - 保留列表页的保护，但移除拖动限制 */
         .wallpaper-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             transition: all 0.3s ease;
             display: block;
-            /* 禁止图片拖拽 */
-            pointer-events: none;
-            user-drag: none;
-            -webkit-user-drag: none;
+            /* 仅保留选择禁止，移除拖动相关限制 */
             user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
@@ -240,6 +236,7 @@
             max-width: 95%;
             max-height: 95vh;
             overflow: visible;
+            /* 移除预览图的遮罩层，允许拖动 */
         }
 
         .modal-img {
@@ -251,10 +248,7 @@
             transition: transform 0.2s ease;
             transform-origin: center center;
             cursor: grab;
-            /* 禁止图片拖拽和选择 */
-            pointer-events: none;
-            user-drag: none;
-            -webkit-user-drag: none;
+            /* 仅保留选择禁止，移除所有拖动相关限制 */
             user-select: none;
             -moz-user-select: none;
             -webkit-user-select: none;
@@ -379,7 +373,7 @@
     <!-- 引入图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body oncontextmenu="return false;" ondragstart="return false;" onselectstart="return false;">
+<body oncontextmenu="return false;" onselectstart="return false;">
     <header>
         <div class="header-content">
             <h1>HuoMAX</h1>
@@ -437,22 +431,14 @@
         document.addEventListener('contextmenu', function(e) {
             // 只阻止图片相关的右键
             if (e.target.tagName === 'IMG' || 
-                e.target.classList.contains('wallpaper-card') || 
-                e.target.classList.contains('modal-img-container')) {
+                e.target.classList.contains('wallpaper-card')) {
                 e.preventDefault();
             }
         });
 
-        // 禁用图片拖拽
+        // 仅禁用列表页图片的拖拽保存，保留预览图的拖动功能
         document.addEventListener('dragstart', function(e) {
-            if (e.target.tagName === 'IMG') {
-                e.preventDefault();
-            }
-        });
-
-        // 禁用选择和复制
-        document.addEventListener('selectstart', function(e) {
-            if (e.target.tagName === 'IMG') {
+            if (e.target.tagName === 'IMG' && e.target.classList.contains('wallpaper-img')) {
                 e.preventDefault();
             }
         });
