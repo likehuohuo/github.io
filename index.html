@@ -13,11 +13,43 @@
             font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
+        /* 定义亮色/暗色模式的CSS变量 */
+        :root {
+            /* 亮色模式 */
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --text-heading: #0f172a;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.05);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --modal-bg: rgba(255, 255, 255, 0.98);
+            --close-btn-bg: rgba(255, 255, 255, 0.8);
+            --close-btn-color: #334155;
+        }
+
+        /* 暗色模式 */
+        .dark-mode {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-heading: #ffffff;
+            --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-card-hover: 0 8px 24px rgba(0, 0, 0, 0.3);
+            --modal-bg: rgba(15, 23, 42, 0.98);
+            --close-btn-bg: rgba(30, 41, 59, 0.8);
+            --close-btn-color: #e2e8f0;
+        }
+
         body {
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
             line-height: 1.5;
             padding-top: 140px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         /* 页面头部 - 固定+靠左 */
@@ -31,25 +63,61 @@
             text-align: left;
             background-color: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(8px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-light);
             max-width: 100%; /* 改为全屏宽度，适配缩放 */
             margin: 0 auto;
             border-radius: 0 0 12px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dark-mode header {
+            background-color: rgba(30, 41, 59, 0.98);
         }
 
         h1 {
             font-size: 2.2rem;
             font-weight: 600;
             letter-spacing: -0.5px;
-            color: #0f172a;
+            color: var(--text-heading);
             margin-bottom: 0.3rem;
+            transition: color 0.3s ease;
         }
 
         .header-subtitle {
             font-size: 1rem;
-            color: #64748b;
+            color: var(--text-secondary);
             font-weight: 400;
             max-width: 800px;
+            transition: color 0.3s ease;
+        }
+
+        /* 暗夜模式切换按钮 */
+        .theme-toggle {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            border: none;
+            border-radius: 50px;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .theme-icon {
+            font-size: 1.2rem;
         }
 
         /* 壁纸网格容器 - 核心智能填充优化 */
@@ -73,14 +141,15 @@
             cursor: pointer;
             position: relative;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            background-color: #ffffff;
+            box-shadow: var(--shadow-card);
+            background-color: var(--bg-secondary);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         /* 卡片悬浮效果 */
         .wallpaper-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            box-shadow: var(--shadow-card-hover);
         }
 
         /* 关键3：动态列跨度 - 适配不同宽度的视口 */
@@ -129,12 +198,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(255, 255, 255, 0.98);
+            background-color: var(--modal-bg);
             z-index: 1000;
             align-items: center;
             justify-content: center;
             padding: 2rem;
             overflow: auto;
+            transition: background-color 0.3s ease;
         }
 
         .modal.active {
@@ -156,7 +226,7 @@
             top: 2rem;
             right: 2rem;
             font-size: 2rem;
-            color: #334155;
+            color: var(--close-btn-color);
             cursor: pointer;
             background: none;
             border: none;
@@ -167,14 +237,15 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: var(--close-btn-bg);
             backdrop-filter: blur(8px);
             z-index: 1001;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .close-btn:hover {
             color: #ef4444;
-            background-color: #ffffff;
+            background-color: var(--bg-secondary);
             transform: scale(1.1);
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
@@ -191,6 +262,10 @@
             .wallpaper-grid {
                 gap: 1.2rem;
                 padding: 1rem 1rem 2.5rem;
+            }
+            .theme-toggle {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -222,14 +297,28 @@
                 width: 40px;
                 height: 40px;
             }
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
         }
     </style>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap">
+    <!-- 引入图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header>
-        <h1>HuoMax</h1>
-        <p class="header-subtitle">火火喜欢的=-=</p>
+        <div class="header-content">
+            <h1>HuoMAX</h1>
+            <p class="header-subtitle">火火喜欢的=-=</p>
+        </div>
+        <!-- 暗夜模式切换按钮 -->
+        <button class="theme-toggle" id="themeToggle">
+            <i class="fas fa-moon theme-icon" id="themeIcon"></i>
+            <span id="themeText">暗夜模式</span>
+        </button>
     </header>
 
     <!-- 壁纸网格展示区 - 混合不同尺寸卡片，测试填充效果 -->
@@ -259,8 +348,6 @@
         <div class="wallpaper-card card-landscape" data-img="https://likexingxiaohuo.bj.bcebos.com/Picture/5.jpg">
             <img src="https://likexingxiaohuo.bj.bcebos.com/Picture/5.jpg" alt="" class="wallpaper-img">
         </div>
-        
-        
     </div>
 
     <!-- 大图预览模态框 -->
@@ -275,6 +362,10 @@
         const modal = document.getElementById('previewModal');
         const modalImg = document.getElementById('modalImg');
         const closeBtn = document.getElementById('closeBtn');
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        const themeText = document.getElementById('themeText');
+        const body = document.body;
 
         // 点击卡片显示大图
         wallpaperCards.forEach(card => {
@@ -305,6 +396,36 @@
 
         // 平滑滚动
         document.documentElement.style.scrollBehavior = 'smooth';
+
+        // 暗夜模式切换逻辑
+        // 1. 从localStorage读取用户偏好
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            updateThemeButton(true);
+        }
+
+        // 2. 切换按钮点击事件
+        themeToggle.addEventListener('click', () => {
+            const isDarkMode = body.classList.toggle('dark-mode');
+            // 保存用户偏好到localStorage
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+            // 更新按钮显示状态
+            updateThemeButton(isDarkMode);
+        });
+
+        // 3. 更新按钮图标和文字
+        function updateThemeButton(isDarkMode) {
+            if (isDarkMode) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                themeText.textContent = '亮色模式';
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                themeText.textContent = '暗夜模式';
+            }
+        }
     </script>
 </body>
 </html>
